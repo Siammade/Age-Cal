@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        margin-top: 70px;
+        font-size: 15px;
+      }
+
+      .form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-top: 15px;
+      }
+
+      label {
+        margin-right: 10px;
+      }
+
+      input {
+        width: 50px;
+        margin-right: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        margin-top: auto;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color:blue;
+       
+      }
+
+      #result {
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 5px;
+      }
+
+      #result.show {
+        display: block;
+      }
+
+      #result p {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .deeppink-bg {
+        background-color: deeppink;
+        color: #fff;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .deepgreen-bg {
+        background-color: #279F14;
+        color: #fff;
+        border-radius: 5px;
+        padding: 10px;
+      }
+
+      table {
+        margin-top: 30px;
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+      }
+
+      caption {
+        caption-side: top;
+        font-size: 20px;
+        background-color: rgb(27, 192, 31);
+        border-radius: 5px;
+      }
+
+      th,
+      td {
+        border: 1px solid white;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+        color: white;
+        background: blue;
+      }
+
+      /* Responsive styles 
+      @media screen and (max-width: 600px) {
+        .form {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        input {
+          width: 100%;
+          margin: 5px 0;
+        }
+      }
+      */
+      
+      @media screen and (max-width: 600px) {
+        input {
+          width: 50px;
+        }
+        button {
+          margin-top: 20px;
+        }
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div class="container">
+  <h1>Age Calculator</h1>
+  <h4 style="color:gray;">version: adv.0.1 </h4>
+  <h2>Enter your Birth Date:</h2>
+  <div class="form">
+    <label for="day">Date:</label>
+    <input type="number" id="day" min="1" max="31" required>
+    <label for="month">Month:</label>
+    <input type="number" id="month" min="1" max="12" required>
+    <label for="year">Year:</label>
+    <input type="number" id="year" min="1700" max="2023" required>
+    <button onclick="calculateAge()">Calculate</button>
+  </div>
+  <div id="result"></div>
+</div>
+
+    
+
+    <script>
+     function calculateAge() {
+  var day = document.getElementById("day").value;
+  var month = document.getElementById("month").value;
+  var year = document.getElementById("year").value;
+  // Validate input
+  if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1700 || year > 2023) {
+    alert("Please enter a valid date of birth");
+    return;
+  }
+  var today = new Date();
+  var birthDate = new Date(year, month - 1, day);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+    m += 12;
+  }
+  var d = today.getDate() - birthDate.getDate();
+  if (d < 0) {
+    m--;
+    d += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+  }
+  var ageResult = `Your age now: ${age} years ${m} months ${Math.floor(d)} days`;
+  var nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+  if (nextBirthday < today) {
+    nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+  }
+  var timeDiff = Math.abs(nextBirthday.getTime() - today.getTime());
+  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  var nextBirthdayResult = `Your next birthday after: 0 years ${m} months ${Math.floor(diffDays)} days`;
+
+  var table = "<table>";
+  table += "<caption> <b>You are Living for</b></caption>";
+  // rest of the code to generate the table
+
+  var totalSeconds = Math.floor((today.getTime() - birthDate.getTime()) / 1000);
+  var totalMinutes = Math.floor(totalSeconds / 60);
+  var totalHours = Math.floor(totalMinutes / 60);
+  var totalDays = Math.floor(totalHours / 24);
+  var totalMonths = (age * 12) + m;
+  var totalYears = age;
+
+  table += `<tr><td>Days→</td><td>${totalDays} •day</td></tr>`;
+  table += `<tr><td>Months→</td><td>${totalMonths} month</td></tr>`;
+  table += `<tr><td>Years→</td><td>${totalYears} year</td></tr>`;
+  table += `<tr><td>Hours→</td><td>${totalHours} hour</td></tr>`;
+  table += `<tr><td>Minutes→</td><td>${totalMinutes} minute</td></tr>`;
+  table += `<tr><td>Seconds→</td><td>${totalSeconds} second</td></tr>`;
+  table += `<tr><td style="color:#1DF4F3;">Create by</td><td style="color:#1DF4F3;">©Ahmed Sharif</td></tr>`;
+
+  table += "</table>";
+
+  document.getElementById("result").innerHTML = `
+    <div class="deeppink-bg">${ageResult}</div>
+    <div class="deepgreen-bg">${nextBirthdayResult}</div>
+    ${table}
+  `;
+  document.getElementById("result").classList.add("show");
+}
+
+
+
+</script>
+</body>
+</html>
